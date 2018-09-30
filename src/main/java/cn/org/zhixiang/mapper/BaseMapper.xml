@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper>
+
+
+
+    <select id="selectByPage"   resultMap="java.lang.Object">
+        select
+        ${baseResult}
+        from #{tableName}
+        where 1=1
+        <if test="whereCondition != null">
+            ${whereCondition}
+        </if>
+        <if test="orderCondition != null and  orderType!=null">
+            order by ${orderCondition} #{orderType}
+        </if>
+        <if test="groupCondition != null">
+            group by ${groupCondition}
+        </if>
+
+    </select>
+
+    <delete id="deleteByPrimaryKey"  >
+      delete from #{tableName}
+      where id = #{id}
+    </delete>
+
+    <insert id="insert"   useGeneratedKeys="true"
+            keyProperty="id">
+      insert into #{tableName} ( ${baseResult})
+      values (#{baseValue})
+  </insert>
+    <insert id="insertSelective"   useGeneratedKeys="true"
+            keyProperty="id">
+        insert into #{tableName} ( ${baseResult})
+      values (#{baseValue})
+    </insert>
+
+    <update id="updateByPrimaryKeySelective"  >
+        update #{tableName}
+        <set>
+            <foreach collection="list" item="entity" index="index" open="(" close=")" separator=",">
+                #{entity.key}=#{entity.value},
+            </foreach>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <update id="deleteByIds" parameterType="java.util.List">
+        update s_user
+        <set>
+            delete_flag = 1
+        </set>
+        where id in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+
+</mapper>
