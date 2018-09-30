@@ -1,5 +1,8 @@
 package cn.org.zhixiang.service;
 
+import cn.org.zhixiang.entity.GridPageRequest;
+import com.github.pagehelper.PageInfo;
+
 /**
  * describe:
  *
@@ -10,4 +13,6 @@ package cn.org.zhixiang.service;
 public interface BaseService{
 
     public Object selectOneById(String id);
+
+    public PageInfo<Object> selectByPage(GridPageRequest gridPageRequest);
 }

@@ -5,20 +5,7 @@
 
 
     <select id="selectByPage"   resultMap="java.lang.Object">
-        select
-        ${baseResult}
-        from #{tableName}
-        where 1=1
-        <if test="whereCondition != null">
-            ${whereCondition}
-        </if>
-        <if test="orderCondition != null and  orderType!=null">
-            order by ${orderCondition} #{orderType}
-        </if>
-        <if test="groupCondition != null">
-            group by ${groupCondition}
-        </if>
-
+        select ${baseResult} from `${tableName}` where 1=1 <if test="search != null"> ${search} </if> <if test="likeSearch != null"> ${search} </if> <if test="order != null"> order by ${order} </if> <if test="group != null">  group by ${group} </if>
     </select>
 
     <delete id="deleteByPrimaryKey"  >
