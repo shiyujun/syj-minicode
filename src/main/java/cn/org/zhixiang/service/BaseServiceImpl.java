@@ -10,6 +10,7 @@ import cn.org.zhixiang.utils.FieldUtil;
 import cn.org.zhixiang.utils.SelectPagePackUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sun.deploy.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * describe:
@@ -72,6 +74,94 @@ public class BaseServiceImpl implements BaseService {
         List<Map<String, Object>> resultList=baseMapper.selectByPage(baseResult,tableName,search,likeSearch,order,group);
         PageInfo pageInfo = new PageInfo(BeanMapUtil.mapsToObjects(resultList,clazz));
         return pageInfo;
+    }
+
+    @Override
+    public void deleteById(String id) {
+        baseMapper.deleteById(tableName,id);
+    }
+
+    @Override
+    public void deleteByIds(List<String> idList) {
+        String ids=StringUtils.join(idList, ",");
+        baseMapper.deleteByIds(tableName,ids);
+    }
+
+    @Override
+    public long insert(Object object) {
+        StringBuffer keyBuffer=new StringBuffer();
+        StringBuffer valueBuffer=new StringBuffer();
+        for (Field field: fields){
+            try {
+                Field objectField = object.getClass().getField(field.getName());
+                String objectValue=(String) objectField.get(object);
+                keyBuffer.append(" ");
+                keyBuffer.append(field.getName());
+                keyBuffer.append(", ");
+                valueBuffer.append(objectValue);
+                keyBuffer.append(", ");
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        String insertKey=keyBuffer.substring(0,keyBuffer.length()-1).toString();
+        String valueKey=valueBuffer.substring(0,valueBuffer.length()-1).toString();
+        long id=baseMapper.insert(tableName,insertKey,valueKey);
+        return id;
+    }
+
+    @Override
+    public long insertSelective(Object object) {
+        StringBuffer keyBuffer=new StringBuffer();
+        StringBuffer valueBuffer=new StringBuffer();
+        for (Field field: fields){
+            try {
+                Field objectField = object.getClass().getField(field.getName());
+                String objectValue=(String) objectField.get(object);
+                if(objectValue!=null){
+                    keyBuffer.append(" ");
+                    keyBuffer.append(field.getName());
+                    keyBuffer.append(", '");
+                    valueBuffer.append(objectValue);
+                    keyBuffer.append("', ");
+                }
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        String insertKey=keyBuffer.substring(0,keyBuffer.length()-1).toString();
+        String valueKey=valueBuffer.substring(0,valueBuffer.length()-1).toString();
+        long id=baseMapper.insert(tableName,insertKey,valueKey);
+        return id;
+    }
+
+    @Override
+    public void updateByIdSelective(Object object) {
+        StringBuffer keyBuffer=new StringBuffer();
+        for (Field field: fields){
+            try {
+                Field objectField = object.getClass().getField(field.getName());
+                String objectValue=(String) objectField.get(object);
+                if(objectValue!=null&& Objects.equals("id",objectField.getName())){
+                    keyBuffer.append("set ");
+                    keyBuffer.append(field.getName());
+                    keyBuffer.append(" ='");
+                    keyBuffer.append(objectValue);
+                    keyBuffer.append("', ");
+                }
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        String param=keyBuffer.substring(0,keyBuffer.length()-1).toString();
+        baseMapper.update(tableName,param,"id");
+
     }
 
 

@@ -1,7 +1,6 @@
 package cn.org.zhixiang.mapper;
 
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,5 +26,19 @@ public interface BaseMapper {
                                             @Param("likeSearch") String likeSearch,
                                             @Param("order") String order,
                                             @Param("group") String group);
+    @Delete("delete from `${tableName}` where id = '#{id}'")
+    void deleteById( @Param("tableName")String tableName,  @Param("id")String id);
 
+    @Delete("delete from `${tableName}` where id in (${ids})")
+    void deleteByIds( @Param("tableName")String tableName,  @Param("ids")String ids);
+
+    @Insert("insert into  `${tableName}` (${insertKey}) values (${valueKey}) ")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
+    long insert(@Param("tableName")String tableName,
+                @Param("insertKey")String insertKey,
+                @Param("valueKey")String valueKey);
+    @Update("update `${tableName}` ${param} where id =#{id}")
+    void update(@Param("tableName")String tableName,
+                @Param("param")String param,
+                @Param("id")String id);
 }

@@ -3,6 +3,8 @@ package cn.org.zhixiang.service;
 import cn.org.zhixiang.entity.GridPageRequest;
 import com.github.pagehelper.PageInfo;
 
+import java.util.List;
+
 /**
  * describe:
  *
@@ -15,4 +17,14 @@ public interface BaseService{
     public Object selectOneById(String id);
 
     public PageInfo<Object> selectByPage(GridPageRequest gridPageRequest);
+
+    public void deleteById(String id);
+
+    public void deleteByIds(List<String> ids);
+
+    public long insert(Object object);
+
+    public long insertSelective(Object object);
+
+    public void updateByIdSelective(Object object);
 }

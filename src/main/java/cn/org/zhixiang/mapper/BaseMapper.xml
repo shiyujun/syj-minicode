@@ -4,9 +4,7 @@
 
 
 
-    <select id="selectByPage"   resultMap="java.lang.Object">
-        select ${baseResult} from `${tableName}` where 1=1 <if test="search != null"> ${search} </if> <if test="likeSearch != null"> ${search} </if> <if test="order != null"> order by ${order} </if> <if test="group != null">  group by ${group} </if>
-    </select>
+
 
     <delete id="deleteByPrimaryKey"  >
       delete from #{tableName}
