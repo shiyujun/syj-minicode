@@ -22,8 +22,6 @@ public interface BaseService{
 
     public void deleteByIds(List<String> ids);
 
-    public long insert(Object object);
-
     public long insertSelective(Object object);
 
     public void updateByIdSelective(Object object);

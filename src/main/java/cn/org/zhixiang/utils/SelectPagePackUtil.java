@@ -36,7 +36,7 @@ public class SelectPagePackUtil {
         for (Map.Entry<String, String> entry:entrySet){
             stringBuffer.append(" and ");
             stringBuffer.append(FieldUtil.toUnderLineString(entry.getKey(),0));
-            stringBuffer.append(" like %'");
+            stringBuffer.append(" like '%");
             stringBuffer.append(entry.getValue());
             stringBuffer.append("'");
         }
