@@ -21,9 +21,9 @@ public class SelectPagePackUtil {
         for (Map.Entry<String, String> entry:entrySet){
             stringBuffer.append(" and ");
             stringBuffer.append(FieldUtil.toUnderLineString(entry.getKey(),0));
-            stringBuffer.append(" = '");
+            stringBuffer.append(" = \"");
             stringBuffer.append(entry.getValue());
-            stringBuffer.append("'");
+            stringBuffer.append("\"");
         }
         return stringBuffer.toString();
     }
@@ -36,9 +36,9 @@ public class SelectPagePackUtil {
         for (Map.Entry<String, String> entry:entrySet){
             stringBuffer.append(" and ");
             stringBuffer.append(FieldUtil.toUnderLineString(entry.getKey(),0));
-            stringBuffer.append(" like '%");
+            stringBuffer.append(" like \"%");
             stringBuffer.append(entry.getValue());
-            stringBuffer.append("'");
+            stringBuffer.append("\"");
         }
         return stringBuffer.toString();
     }
@@ -51,9 +51,9 @@ public class SelectPagePackUtil {
         stringBuffer.append(" order by  ");
         for (Map.Entry<String, String> entry:entrySet){
             stringBuffer.append(FieldUtil.toUnderLineString(entry.getKey(),0));
-            stringBuffer.append(" ");
+            stringBuffer.append("\" ");
             stringBuffer.append(entry.getValue());
-            stringBuffer.append(",");
+            stringBuffer.append("\",");
         }
         return stringBuffer.substring(0,stringBuffer.length()-1).toString();
     }
@@ -65,8 +65,9 @@ public class SelectPagePackUtil {
 
         stringBuffer.append(" group by  ");
         for ( String entry:groupArray){
+            stringBuffer.append("\"");
             stringBuffer.append(FieldUtil.toUnderLineString(entry,0));
-            stringBuffer.append(",");
+            stringBuffer.append("\",");
         }
         return stringBuffer.substring(0,stringBuffer.length()-1).toString();
     }

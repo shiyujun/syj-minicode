@@ -68,19 +68,19 @@ public class BaseServiceImpl implements BaseService {
         StringBuffer sql=new StringBuffer("where 1=1 ");
         String search= SelectPagePackUtil.packSerach(gridPageRequest.getSearchMap());
         String likeSearch=SelectPagePackUtil.packLikeSerach(gridPageRequest.getLikeSearchMap());
-        String order=SelectPagePackUtil.packOrder(gridPageRequest.getOrderMap());
         String group=SelectPagePackUtil.packGroup(gridPageRequest.getGroupArray());
+        String order=SelectPagePackUtil.packOrder(gridPageRequest.getOrderMap());
         if(search!=null){
             sql.append(search);
         }
         if(likeSearch!=null){
             sql.append(likeSearch);
         }
-        if(order!=null){
-            sql.append(order);
-        }
         if(group!=null){
             sql.append(group);
+        }
+        if(order!=null){
+            sql.append(order);
         }
         List<Map<String, Object>> resultList=baseMapper.selectByPage(baseResult,tableName,sql.toString());
         PageInfo pageInfo = new PageInfo(BeanMapUtil.mapsToObjects(resultList,clazz));
@@ -113,9 +113,9 @@ public class BaseServiceImpl implements BaseService {
                     keyBuffer.append("`");
                     keyBuffer.append(field.getName());
                     keyBuffer.append("`,");
-                    valueBuffer.append("'");
+                    valueBuffer.append("\"");
                     valueBuffer.append(objectValue.toString());
-                    valueBuffer.append("',");
+                    valueBuffer.append("\",");
                 }
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();
@@ -140,9 +140,9 @@ public class BaseServiceImpl implements BaseService {
                 if(objectValue!=null&& !Objects.equals("id",objectField.getName())){
                     keyBuffer.append("set `");
                     keyBuffer.append(field.getName());
-                    keyBuffer.append("` ='");
+                    keyBuffer.append("` =\"");
                     keyBuffer.append(objectValue);
-                    keyBuffer.append("', ");
+                    keyBuffer.append("\", ");
                 }
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();
