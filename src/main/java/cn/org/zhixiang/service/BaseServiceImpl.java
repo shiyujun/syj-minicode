@@ -1,6 +1,7 @@
 package cn.org.zhixiang.service;
 
 
+import cn.org.zhixiang.annotation.Id;
 import cn.org.zhixiang.config.SpringContextUtil;
 import cn.org.zhixiang.entity.GridPageRequest;
 import cn.org.zhixiang.mapper.BaseMapper;
@@ -9,8 +10,6 @@ import cn.org.zhixiang.utils.FieldUtil;
 import cn.org.zhixiang.utils.SelectPagePackUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.util.StringUtils;
-
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -33,6 +32,7 @@ public class BaseServiceImpl implements BaseService {
     private Field[] fields;
     private String baseResult;
     private String tableName;
+    private String idField="id";
     Map<String,Object> entity=new HashMap<>();
 
 
@@ -42,7 +42,6 @@ public class BaseServiceImpl implements BaseService {
         this.clazz=clazz;
         this.init();
     }
-
     private void init(){
         fields = clazz.getDeclaredFields();
         StringBuffer classNameBuffer=new StringBuffer(clazz.getName());
@@ -53,13 +52,16 @@ public class BaseServiceImpl implements BaseService {
             String underLineString=FieldUtil.toUnderLineString(field.getName(),0);
             baseResultBuffer.append(underLineString+" as " + field.getName()+",");
             entity.put(field.getName(),underLineString);
+            if(field.getAnnotation(Id.class)!=null){
+                this.idField=underLineString;
+            }
         }
         baseResult=baseResultBuffer.substring(0,baseResultBuffer.length()-1).toString();
     }
     @Override
-    public Object selectOneById(String id) {
-        Map<String,Object> resultMap=baseMapper.selectOneById(baseResult,tableName,id);
-        return BeanMapUtil.mapToBean(resultMap,clazz);
+    public Map<String,Object> selectOneById(String id) {
+        Map<String,Object> resultMap=baseMapper.selectOneById(baseResult,tableName,idField,id);
+        return resultMap;
     }
 
     @Override
@@ -83,19 +85,19 @@ public class BaseServiceImpl implements BaseService {
             sql.append(order);
         }
         List<Map<String, Object>> resultList=baseMapper.selectByPage(baseResult,tableName,sql.toString());
-        PageInfo pageInfo = new PageInfo(BeanMapUtil.mapsToObjects(resultList,clazz));
+        PageInfo pageInfo = new PageInfo(resultList);
         return pageInfo;
     }
 
     @Override
     public void deleteById(String id) {
-        baseMapper.deleteById(tableName,id);
+        baseMapper.deleteById(tableName,idField,id);
     }
 
     @Override
     public void deleteByIds(List<String> idList) {
         String ids= String.join(",",idList);
-        baseMapper.deleteByIds(tableName,ids);
+        baseMapper.deleteByIds(tableName,idField,ids);
     }
 
 
@@ -151,7 +153,7 @@ public class BaseServiceImpl implements BaseService {
             }
         }
         String param=keyBuffer.substring(0,keyBuffer.length()-1).toString();
-        baseMapper.update(tableName,param,"id");
+        baseMapper.update(tableName,param,idField);
 
     }
 

@@ -4,6 +4,7 @@ import cn.org.zhixiang.entity.GridPageRequest;
 import com.github.pagehelper.PageInfo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * describe:
@@ -14,7 +15,7 @@ import java.util.List;
  */
 public interface BaseService{
 
-    public Object selectOneById(String id);
+    public Map<String,Object> selectOneById(String id);
 
     public PageInfo<Object> selectByPage(GridPageRequest gridPageRequest);
 
