@@ -21,6 +21,9 @@ public interface BaseMapper {
                                              @Param("idField") String idField,
                                              @Param("id") String id);
 
+    @Select(" select column_name from information_schema.columns where table_name='${tableName}'")
+    public List<String> selectColumnName(@Param("tableName")String tableName);
+
     @Select(" select ${baseResult} from `${tableName}` ${sql}")
     public List<Map<String, Object>> selectByPage(@Param("baseResult") String baseResult,
                                                   @Param("tableName") String tableName,

@@ -20,7 +20,7 @@ public class SelectPagePackUtil {
         Set<Map.Entry<String, String>> entrySet= searchMap.entrySet();
         for (Map.Entry<String, String> entry:entrySet){
             stringBuffer.append(" and ");
-            stringBuffer.append(FieldUtil.toUnderLineString(entry.getKey(),0));
+            stringBuffer.append(FieldUtil.toUnderLineString(entry.getKey()));
             stringBuffer.append(" = \"");
             stringBuffer.append(entry.getValue());
             stringBuffer.append("\"");
@@ -35,7 +35,7 @@ public class SelectPagePackUtil {
         Set<Map.Entry<String, String>> entrySet= likeSearchMap.entrySet();
         for (Map.Entry<String, String> entry:entrySet){
             stringBuffer.append(" and ");
-            stringBuffer.append(FieldUtil.toUnderLineString(entry.getKey(),0));
+            stringBuffer.append(FieldUtil.toUnderLineString(entry.getKey()));
             stringBuffer.append(" like \"%");
             stringBuffer.append(entry.getValue());
             stringBuffer.append("\"");
@@ -50,12 +50,12 @@ public class SelectPagePackUtil {
         Set<Map.Entry<String, String>> entrySet= orderMap.entrySet();
         stringBuffer.append(" order by  ");
         for (Map.Entry<String, String> entry:entrySet){
-            stringBuffer.append(FieldUtil.toUnderLineString(entry.getKey(),0));
+            stringBuffer.append(FieldUtil.toUnderLineString(entry.getKey()));
             stringBuffer.append("\" ");
             stringBuffer.append(entry.getValue());
             stringBuffer.append("\",");
         }
-        return stringBuffer.substring(0,stringBuffer.length()-1).toString();
+        return FieldUtil.subLastChar(stringBuffer);
     }
     public static String packGroup(String[] groupArray){
         if(groupArray==null){
@@ -66,9 +66,9 @@ public class SelectPagePackUtil {
         stringBuffer.append(" group by  ");
         for ( String entry:groupArray){
             stringBuffer.append("\"");
-            stringBuffer.append(FieldUtil.toUnderLineString(entry,0));
+            stringBuffer.append(FieldUtil.toUnderLineString(entry));
             stringBuffer.append("\",");
         }
-        return stringBuffer.substring(0,stringBuffer.length()-1).toString();
+        return FieldUtil.subLastChar(stringBuffer);
     }
 }

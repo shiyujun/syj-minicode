@@ -25,10 +25,12 @@
 package cn.org.zhixiang.config;
 
 
-import cn.org.zhixiang.aspect.MiNiCodeControllerAnnotationAspect;
+import cn.org.zhixiang.entity.IdField;
+import cn.org.zhixiang.utils.Const;
 import com.github.pagehelper.PageHelper;
 import org.apache.ibatis.plugin.Interceptor;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Conditional;
@@ -54,8 +56,11 @@ public class EnableSyjMiniCodeConfiguration {
         new SqlSessionFactoryBean().setPlugins(new Interceptor[]{pageHelper});
         return pageHelper;
     }
+
     @Bean
-    public MiNiCodeControllerAnnotationAspect miNiCodeControllerAnnotationAspect(){
-        return new MiNiCodeControllerAnnotationAspect();
+    @ConditionalOnMissingBean(name = Const.ID_FIELD_NAME)
+    public IdField idField() {
+        return new IdField();
     }
+
 }

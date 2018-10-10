@@ -1,22 +1,21 @@
 package cn.org.zhixiang.service;
 
 
-import cn.org.zhixiang.annotation.Id;
 import cn.org.zhixiang.config.SpringContextUtil;
 import cn.org.zhixiang.entity.GridPageRequest;
 import cn.org.zhixiang.mapper.BaseMapper;
 import cn.org.zhixiang.utils.BeanMapUtil;
+import cn.org.zhixiang.utils.Const;
 import cn.org.zhixiang.utils.FieldUtil;
 import cn.org.zhixiang.utils.SelectPagePackUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-
+import java.util.Set;
 
 
 /**
@@ -28,36 +27,22 @@ import java.util.Objects;
  */
 
 public class BaseServiceImpl implements BaseService {
-    private Class clazz;
-    private Field[] fields;
+
     private String baseResult;
     private String tableName;
-    private String idField="id";
-    Map<String,Object> entity=new HashMap<>();
+    private String idField;
+
+    private static BaseMapper baseMapper= SpringContextUtil.getBean(Const.BASE_MAPPER_NAME);
 
 
-    private static BaseMapper baseMapper= SpringContextUtil.getBean("baseMapper");
 
-    public BaseServiceImpl(Class clazz){
-        this.clazz=clazz;
-        this.init();
+    public BaseServiceImpl(String tableName, String baseResult, String idField) {
+        this.tableName=tableName;
+        this.baseResult=baseResult;
+        this.idField=idField;
     }
-    private void init(){
-        fields = clazz.getDeclaredFields();
-        StringBuffer classNameBuffer=new StringBuffer(clazz.getName());
-        String className=classNameBuffer.substring(classNameBuffer.lastIndexOf(".")+1,classNameBuffer.length());
-        tableName=FieldUtil.toUnderLineString(className,1);
-        StringBuffer baseResultBuffer=new StringBuffer();
-        for (Field field : fields){
-            String underLineString=FieldUtil.toUnderLineString(field.getName(),0);
-            baseResultBuffer.append(underLineString+" as " + field.getName()+",");
-            entity.put(field.getName(),underLineString);
-            if(field.getAnnotation(Id.class)!=null){
-                this.idField=underLineString;
-            }
-        }
-        baseResult=baseResultBuffer.substring(0,baseResultBuffer.length()-1).toString();
-    }
+
+
     @Override
     public Map<String,Object> selectOneById(String id) {
         Map<String,Object> resultMap=baseMapper.selectOneById(baseResult,tableName,idField,id);
@@ -106,27 +91,20 @@ public class BaseServiceImpl implements BaseService {
     public long insertSelective(Object object) {
         StringBuffer keyBuffer=new StringBuffer();
         StringBuffer valueBuffer=new StringBuffer();
-        for (Field field: fields){
-            try {
-                Field objectField = object.getClass().getDeclaredField(field.getName());
-                objectField.setAccessible(true);
-                Object objectValue= objectField.get(object);
-                if(objectValue!=null){
-                    keyBuffer.append("`");
-                    keyBuffer.append(field.getName());
-                    keyBuffer.append("`,");
-                    valueBuffer.append("\"");
-                    valueBuffer.append(objectValue.toString());
-                    valueBuffer.append("\",");
-                }
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+
+        Map<String,Object> objectMap=BeanMapUtil.beanToMap(object);
+        Set<Map.Entry<String,Object>> entrySet= objectMap.entrySet();
+        for (Map.Entry<String,Object> entry:entrySet){
+            keyBuffer.append("`");
+            keyBuffer.append(entry.getKey());
+            keyBuffer.append("`,");
+            valueBuffer.append("\"");
+            valueBuffer.append(entry.getValue().toString());
+            valueBuffer.append("\",");
         }
-        String insertKey=keyBuffer.substring(0,keyBuffer.length()-1).toString();
-        String valueKey=valueBuffer.substring(0,valueBuffer.length()-1).toString();
+
+        String insertKey=FieldUtil.subLastChar(keyBuffer);
+        String valueKey=FieldUtil.subLastChar(valueBuffer);
         long id=baseMapper.insert(tableName,insertKey,valueKey);
         return id;
     }
@@ -134,25 +112,19 @@ public class BaseServiceImpl implements BaseService {
     @Override
     public void updateByIdSelective(Object object) {
         StringBuffer keyBuffer=new StringBuffer();
-        for (Field field: fields){
-            try {
-                Field objectField = object.getClass().getDeclaredField(field.getName());
-                objectField.setAccessible(true);
-                Object objectValue= objectField.get(object);
-                if(objectValue!=null&& !Objects.equals("id",objectField.getName())){
-                    keyBuffer.append("set `");
-                    keyBuffer.append(field.getName());
-                    keyBuffer.append("` =\"");
-                    keyBuffer.append(objectValue);
-                    keyBuffer.append("\", ");
-                }
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+        Map<String,Object> objectMap=BeanMapUtil.beanToMap(object);
+        Set<Map.Entry<String,Object>> entrySet= objectMap.entrySet();
+        for (Map.Entry<String,Object> entry:entrySet){
+            if(!Objects.equals(idField,entry.getKey())){
+                keyBuffer.append("set `");
+                keyBuffer.append(entry.getKey());
+                keyBuffer.append("` =\"");
+                keyBuffer.append(entry.getValue().toString());
+                keyBuffer.append("\", ");
             }
         }
-        String param=keyBuffer.substring(0,keyBuffer.length()-1).toString();
+
+        String param=FieldUtil.subLastChar(keyBuffer);
         baseMapper.update(tableName,param,idField);
 
     }
