@@ -11,6 +11,7 @@ import cn.org.zhixiang.utils.SelectPagePackUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
@@ -88,15 +89,20 @@ public class BaseServiceImpl implements BaseService {
 
 
     @Override
-    public long insertSelective(Object object) {
+    public void insertSelective(Object object) {
         StringBuffer keyBuffer=new StringBuffer();
         StringBuffer valueBuffer=new StringBuffer();
 
-        Map<String,Object> objectMap=BeanMapUtil.beanToMap(object);
+        Map<String,Object> objectMap;
+        if(object instanceof Map){
+            objectMap=(Map)object;
+        }else{
+            objectMap=BeanMapUtil.beanToMap(object);
+        }
         Set<Map.Entry<String,Object>> entrySet= objectMap.entrySet();
         for (Map.Entry<String,Object> entry:entrySet){
             keyBuffer.append("`");
-            keyBuffer.append(entry.getKey());
+            keyBuffer.append(FieldUtil.toUnderLineString(entry.getKey()));
             keyBuffer.append("`,");
             valueBuffer.append("\"");
             valueBuffer.append(entry.getValue().toString());
@@ -105,27 +111,36 @@ public class BaseServiceImpl implements BaseService {
 
         String insertKey=FieldUtil.subLastChar(keyBuffer);
         String valueKey=FieldUtil.subLastChar(valueBuffer);
-        long id=baseMapper.insert(tableName,insertKey,valueKey);
-        return id;
+        baseMapper.insert(tableName,insertKey,valueKey);
+
     }
 
     @Override
     public void updateByIdSelective(Object object) {
         StringBuffer keyBuffer=new StringBuffer();
-        Map<String,Object> objectMap=BeanMapUtil.beanToMap(object);
+        Map<String,Object> objectMap;
+        if(object instanceof Map){
+            objectMap=(Map)object;
+        }else{
+            objectMap=BeanMapUtil.beanToMap(object);
+        }
         Set<Map.Entry<String,Object>> entrySet= objectMap.entrySet();
+        String id=null;
+        keyBuffer.append("set ");
         for (Map.Entry<String,Object> entry:entrySet){
             if(!Objects.equals(idField,entry.getKey())){
-                keyBuffer.append("set `");
-                keyBuffer.append(entry.getKey());
+                keyBuffer.append("`");
+                keyBuffer.append(FieldUtil.toUnderLineString(entry.getKey()));
                 keyBuffer.append("` =\"");
                 keyBuffer.append(entry.getValue().toString());
-                keyBuffer.append("\", ");
+                keyBuffer.append("\",");
+            }else{
+                id=entry.getValue().toString();
             }
         }
 
         String param=FieldUtil.subLastChar(keyBuffer);
-        baseMapper.update(tableName,param,idField);
+        baseMapper.update(tableName,param,idField,id);
 
     }
 

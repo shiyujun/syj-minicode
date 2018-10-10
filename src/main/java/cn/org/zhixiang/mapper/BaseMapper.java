@@ -39,12 +39,12 @@ public interface BaseMapper {
                       @Param("ids")String ids);
 
     @Insert("insert into  `${tableName}` (${insertKey}) values (${valueKey}) ")
-    @Options(useGeneratedKeys = true, keyProperty = "id")
-    long insert(@Param("tableName")String tableName,
+    void insert(@Param("tableName")String tableName,
                 @Param("insertKey")String insertKey,
                 @Param("valueKey")String valueKey);
     @Update("update `${tableName}` ${param} where `${idField}` =#{id}")
     void update(@Param("tableName")String tableName,
                 @Param("param")String param,
-                @Param("idField") String idField);
+                @Param("idField")String idField,
+                @Param("id") String id);
 }

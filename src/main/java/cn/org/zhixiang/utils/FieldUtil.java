@@ -19,8 +19,8 @@ public class FieldUtil {
         for ( char c:fieldChars) {
             if(Character.isUpperCase(c)){
                 fieldBuffer.append('_');
-                fieldBuffer.append(Character.toLowerCase(c));
             }
+            fieldBuffer.append(Character.toLowerCase(c));
         }
         return fieldBuffer.toString();
     }
