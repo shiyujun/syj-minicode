@@ -30,6 +30,7 @@ import cn.org.zhixiang.utils.Const;
 import com.github.pagehelper.PageHelper;
 import org.apache.ibatis.plugin.Interceptor;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -39,7 +40,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Properties;
 
 
-@ComponentScan("cn.org.zhixiang")
+
 @Configuration
 public class EnableSyjMiniCodeConfiguration {
 

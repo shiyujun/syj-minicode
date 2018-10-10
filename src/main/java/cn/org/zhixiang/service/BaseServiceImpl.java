@@ -101,6 +101,9 @@ public class BaseServiceImpl implements BaseService {
         }
         Set<Map.Entry<String,Object>> entrySet= objectMap.entrySet();
         for (Map.Entry<String,Object> entry:entrySet){
+            if(entry.getValue()==null){
+                continue;
+            }
             keyBuffer.append("`");
             keyBuffer.append(FieldUtil.toUnderLineString(entry.getKey()));
             keyBuffer.append("`,");
@@ -128,6 +131,9 @@ public class BaseServiceImpl implements BaseService {
         String id=null;
         keyBuffer.append("set ");
         for (Map.Entry<String,Object> entry:entrySet){
+            if(entry.getValue()==null){
+                continue;
+            }
             if(!Objects.equals(idField,entry.getKey())){
                 keyBuffer.append("`");
                 keyBuffer.append(FieldUtil.toUnderLineString(entry.getKey()));

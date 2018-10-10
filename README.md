@@ -10,8 +10,36 @@
 1.  你是否还在使用代码生成插件生成一些重复的代码？
 2.  你是否还在按照 controller-->service-->dao-->mapper.xml的流程写下了一个一个表的增删改查代码？
 3.  你的代码里是否存在大量的除了操作的表不一样而其他的逻辑完全一样的重复代码？
-4.  你是否渴望一分钟写好一个模块？
+4.  你是否渴望一行代码都不用写就能完成一个简单的模块？
+# 如何不写代码就完成一个简单的模块
 
+## 代码层面如何用？
+private BaseService getBaseService(){
+        return ServiceBeanFactory.getBean("SUser");
+    }
+     Class<SUser> sUser=  BeanMapUtil.mapToBean(ServiceBeanFactory.getBean("SUser").selectOneById("115"),SUser.class) ;
+            Class<Role> role=  BeanMapUtil.mapToBean(ServiceBeanFactory.getBean("SRole").selectOneById("115"),Role.class) ;
+            GridPageRequest gridPageRequest=new GridPageRequest();
+            gridPageRequest.setPageNum(0);
+            gridPageRequest.setPageSize(10);
+            PageInfo<Object> roleList= ServiceBeanFactory.getBean("SRole").selectByPage(gridPageRequest);
+            PageInfo<Object> userList= ServiceBeanFactory.getBean("SUser").selectByPage(gridPageRequest);
+            ServiceBeanFactory.getBean("SUser").deleteById("116");
+            ServiceBeanFactory.getBean("SRole").deleteById("3");
+            List<String> list=new ArrayList<>();
+            list.add("117");
+            ServiceBeanFactory.getBean("SUser").deleteByIds(list);
+            ServiceBeanFactory.getBean("SRole").deleteByIds(list);
+    
+            SUser sUser1=new SUser();
+            sUser1.setId(108L);
+            ServiceBeanFactory.getBean("SUser").insertSelective(sUser1);
+            Role role1=new Role();
+            role1.setId(108L);
+            ServiceBeanFactory.getBean("SRole").insertSelective(role1);
+            sUser1.setUserName("1");
+            role1.setRoleName("1");
+            ServiceBeanFactory.getBean("SRole").updateByIdSelective(role1);
 # Quick Start
 1. 引入syj-minicode
 
