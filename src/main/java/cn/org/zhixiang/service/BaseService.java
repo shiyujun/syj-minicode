@@ -19,6 +19,8 @@ public interface BaseService{
 
     public PageInfo<Object> selectByPage(GridPageRequest gridPageRequest);
 
+    public List<Map<String, Object>> selectBySelective(GridPageRequest gridPageRequest);
+
     public void deleteById(String id);
 
     public void deleteByIds(List<String> ids);

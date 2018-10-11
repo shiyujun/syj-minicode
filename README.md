@@ -83,38 +83,75 @@
            } 
 ```
 2. 有的项目在进行插入和更新时会加入创建人和修改人等信息。如果有此需求请按照如下方式调用
-
-## 代码层面如何用？
-> 插入和更新操作只会操作object对象值不为空的字段，所以为了避免误操作建议对象属性类型使用包装类
-
-private BaseService getBaseService(){
-        return ServiceBeanFactory.getBean("SUser");
+    1. 插入扩展
+    创建一个名为InsertExtend的bean并实现DefaultExtend接口
+```java
+@Component
+public class InsertExtend implements ExtendInterface{
+    @Override
+    public Map<String, String> exectue() {
+        Map<String, String> map=new HashMap<>();
+        map.put("createTime", System.currentTimeMillis());
+        map.put("createBy", "创建人id");
+        map.put("createUserName", "创建人名称");
+        return map;
     }
-     Class<SUser> sUser=  BeanMapUtil.mapToBean(ServiceBeanFactory.getBean("SUser").selectOneById("115"),SUser.class) ;
-            Class<Role> role=  BeanMapUtil.mapToBean(ServiceBeanFactory.getBean("SRole").selectOneById("115"),Role.class) ;
-            GridPageRequest gridPageRequest=new GridPageRequest();
-            gridPageRequest.setPageNum(0);
-            gridPageRequest.setPageSize(10);
-            PageInfo<Object> roleList= ServiceBeanFactory.getBean("SRole").selectByPage(gridPageRequest);
-            PageInfo<Object> userList= ServiceBeanFactory.getBean("SUser").selectByPage(gridPageRequest);
-            ServiceBeanFactory.getBean("SUser").deleteById("116");
-            ServiceBeanFactory.getBean("SRole").deleteById("3");
-            List<String> list=new ArrayList<>();
-            list.add("117");
-            ServiceBeanFactory.getBean("SUser").deleteByIds(list);
-            ServiceBeanFactory.getBean("SRole").deleteByIds(list);
-    
-            SUser sUser1=new SUser();
-            sUser1.setId(108L);
-            ServiceBeanFactory.getBean("SUser").insertSelective(sUser1);
-            Role role1=new Role();
-            role1.setId(108L);
-            ServiceBeanFactory.getBean("SRole").insertSelective(role1);
-            sUser1.setUserName("1");
-            role1.setRoleName("1");
-            ServiceBeanFactory.getBean("SRole").updateByIdSelective(role1);
+}
+```
+   2. 更新扩展
+     创建一个名为UpdateExtend的bean并实现DefaultExtend接口
+```java
+    @Component
+    public class UpdateExtend implements ExtendInterface{
+        @Override
+        public Map<String, String> exectue() {
+            Map<String, String> map=new HashMap<>();
+            map.put("updateTime", System.currentTimeMillis());
+            map.put("updateBy", "修改人id");
+            map.put("updateUserName", "修改人名称");
+            return map;
+        }
+    }
+```
+# 还有没有更灵活的使用方式？
+> 更灵活的方式为在代码中使用
+1. 针对用户表的操作
+    1. 初始化
+```java
+private BaseService getUserBaseService(){
+        return ServiceBeanFactory.getBean("User");
+    }
+```
+   2. 根据id查询
+```java
+getUserBaseService().selectOneById("115");
+```
+   3. 根据条件查询列表（相信你已经知道了gridPageRequest对象如何组装）
+```java
+getUserBaseService().selectBySelective(gridPageRequest);
+```
+   4. 插入
+```java
+getUserBaseService().insertSelective(user);
+```
+   5. 更新
+```java
+getUserBaseService().updateByIdSelective(user);
+```
+   6. 删除
+```java
+getUserBaseService().deleteById("115");
+```
+   6. 批量删除
+```java
+List<String> list=new ArrayList<>();
+list.add("115");
+list.add("116");
+list.add("117");
+getUserBaseService().deleteByIds(list);
+```
 # Quick Start
->相信看了上方的介绍你已经迫不及待的想要使用了
+>相信看了上方的介绍你已经迫不及待的想要使用了，那么使用起来简单么？看一下你就知道。
 1. 引入syj-minicode
 
 <dependency>

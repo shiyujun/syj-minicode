@@ -3,6 +3,8 @@ package cn.org.zhixiang.service;
 
 import cn.org.zhixiang.config.SpringContextUtil;
 import cn.org.zhixiang.entity.GridPageRequest;
+import cn.org.zhixiang.extend.DefaultExtend;
+import cn.org.zhixiang.extend.ExtendInterface;
 import cn.org.zhixiang.mapper.BaseMapper;
 import cn.org.zhixiang.utils.BeanMapUtil;
 import cn.org.zhixiang.utils.Const;
@@ -34,6 +36,8 @@ public class BaseServiceImpl implements BaseService {
     private String idField;
 
     private static BaseMapper baseMapper= SpringContextUtil.getBean(Const.BASE_MAPPER_NAME);
+    private static ExtendInterface insertExtend= SpringContextUtil.getBean(Const.INSERT_EXTEND);
+    private static ExtendInterface updateExtend= SpringContextUtil.getBean(Const.INSERT_EXTEND);
 
 
 
@@ -74,6 +78,28 @@ public class BaseServiceImpl implements BaseService {
         PageInfo pageInfo = new PageInfo(resultList);
         return pageInfo;
     }
+    @Override
+    public List<Map<String, Object>> selectBySelective(GridPageRequest gridPageRequest) {
+        StringBuffer sql=new StringBuffer("where 1=1 ");
+        String search= SelectPagePackUtil.packSerach(gridPageRequest.getSearchMap());
+        String likeSearch=SelectPagePackUtil.packLikeSerach(gridPageRequest.getLikeSearchMap());
+        String group=SelectPagePackUtil.packGroup(gridPageRequest.getGroupArray());
+        String order=SelectPagePackUtil.packOrder(gridPageRequest.getOrderMap());
+        if(search!=null){
+            sql.append(search);
+        }
+        if(likeSearch!=null){
+            sql.append(likeSearch);
+        }
+        if(group!=null){
+            sql.append(group);
+        }
+        if(order!=null){
+            sql.append(order);
+        }
+        List<Map<String, Object>> resultList=baseMapper.selectByPage(baseResult,tableName,sql.toString());
+        return resultList;
+    }
 
     @Override
     public void deleteById(String id) {
@@ -99,7 +125,8 @@ public class BaseServiceImpl implements BaseService {
         }else{
             objectMap=BeanMapUtil.beanToMap(object);
         }
-
+        Map<String,String> insertMap= insertExtend.exectue();
+        objectMap.putAll(insertMap);
         Set<Map.Entry<String,Object>> entrySet= objectMap.entrySet();
         for (Map.Entry<String,Object> entry:entrySet){
             if(entry.getValue()==null){
@@ -128,6 +155,10 @@ public class BaseServiceImpl implements BaseService {
         }else{
             objectMap=BeanMapUtil.beanToMap(object);
         }
+
+        Map<String,String> updateMap= updateExtend.exectue();
+        objectMap.putAll(updateMap);
+
         Set<Map.Entry<String,Object>> entrySet= objectMap.entrySet();
         String id=null;
         keyBuffer.append("set ");

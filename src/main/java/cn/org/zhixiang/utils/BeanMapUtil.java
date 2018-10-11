@@ -2,10 +2,8 @@ package cn.org.zhixiang.utils;
 
 import org.springframework.cglib.beans.BeanMap;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * describe:
@@ -38,6 +36,48 @@ public class BeanMapUtil {
         return bean;
     }
 
+    public static Object MapToModel(Map<String, Object> map, Object o) throws Exception {
+        if (!map.isEmpty()) {
+            for (String k : map.keySet()) {
+                Object v = null;
+                if (!k.isEmpty()) {
+                    v = map.get(k);
+                }
+                Field[] fields = null;
+                fields = o.getClass().getDeclaredFields();
+                String clzName = o.getClass().getSimpleName();
+                for (Field field : fields) {
+                    int mod = field.getModifiers();
+                    if (field.getName().toUpperCase().equals(k.toUpperCase())) {
+                        field.setAccessible(true);
+                        String type = field.getType().toString();
+                        if (type.endsWith("String")) {
+                            if (v != null) {
+                                v = v.toString();
+                            } else {
+                                v = "";
+                            }
+                        }
+                        if (type.endsWith("Date")) {
+                            v = new Date(v.toString());
+                        }
+                        if (type.endsWith("Boolean")) {
+                            v = Boolean.getBoolean(v.toString());
+                        }
+                        if (type.endsWith("int")) {
+                            v = new Integer(v.toString());
+                        }
+                        if (type.endsWith("Long")) {
+                            v = new Long(v.toString());
+                        }
+                        field.set(o, v);
+                    }
+                }
+            }
+        }
+        return o;
+    }
+
     /**
      * 将List<T>转换为List<Map<String, Object>>
      */
@@ -58,8 +98,8 @@ public class BeanMapUtil {
     /**
      * 将List<Map<String,Object>>转换为List<T>
      */
-    public static <T> List<T> mapsToObjects(List<Map<String, Object>> maps, Class<T> clazz)  {
-        List<T> list =new ArrayList();
+    public static <T> List<T> mapsToObjects(List<Map<String, Object>> maps, Class<T> clazz) {
+        List<T> list = new ArrayList();
         if (maps != null && maps.size() > 0) {
             Map<String, Object> map = null;
             T bean = null;
