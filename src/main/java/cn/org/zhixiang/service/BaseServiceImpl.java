@@ -99,6 +99,7 @@ public class BaseServiceImpl implements BaseService {
         }else{
             objectMap=BeanMapUtil.beanToMap(object);
         }
+
         Set<Map.Entry<String,Object>> entrySet= objectMap.entrySet();
         for (Map.Entry<String,Object> entry:entrySet){
             if(entry.getValue()==null){

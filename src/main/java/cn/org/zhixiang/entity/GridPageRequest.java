@@ -11,19 +11,19 @@ import java.util.Map;
  */
 public class GridPageRequest {
     /**
-     * 查询关键字
+     * 查询关键字Map
      */
     private Map<String, String> searchMap;
     /**
-     * 模糊查询关键字
+     * 模糊查询关键字Map
      */
     private Map<String, String> likeSearchMap;
     /**
-     * 排序关键字
+     * 排序关键字Map
      */
     private Map<String, String> orderMap;
     /**
-     * 分组关键字
+     * 分组关键字数组
      */
     private String[] groupArray;
 
