@@ -26,9 +26,14 @@ public class GridPageRequest {
      * 分组关键字数组
      */
     private String[] groupArray;
-
-    private int pageNum;
-    private int pageSize;
+    /**
+     * 第几页
+     */
+    private Integer pageNum;
+    /**
+     * 查几条
+     */
+    private Integer pageSize;
 
 
     public Map<String, String> getSearchMap() {
@@ -63,19 +68,19 @@ public class GridPageRequest {
         this.groupArray = groupArray;
     }
 
-    public int getPageNum() {
+    public Integer getPageNum() {
         return pageNum;
     }
 
-    public void setPageNum(int pageNum) {
+    public void setPageNum(Integer pageNum) {
         this.pageNum = pageNum;
     }
 
-    public int getPageSize() {
+    public Integer getPageSize() {
         return pageSize;
     }
 
-    public void setPageSize(int pageSize) {
+    public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
     }
 }
