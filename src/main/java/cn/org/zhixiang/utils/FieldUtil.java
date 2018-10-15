@@ -3,15 +3,15 @@ package cn.org.zhixiang.utils;
 /**
  * describe:
  *
- * @创建人 syj
- * @创建时间 2018/09/30
- * @描述 字段处理工具类
+ * @author syj
+ * CreateTime 2018/09/30
+ * Description 字段处理工具类
  */
 public class FieldUtil {
     /**
      * 驼峰命名转换为下划线模式
      * @param field 字段名称
-     * @return
+     * @return 数据库表字典
      */
     public static String toUnderLineString(String field){
         StringBuffer fieldBuffer=new StringBuffer();
@@ -27,7 +27,7 @@ public class FieldUtil {
     /**
      * 获取表名
      * @param field 字段名称
-     * @return
+     * @return 数据库表名称
      */
     public static String getTableName(String field){
         StringBuffer fieldBuffer=new StringBuffer();
@@ -43,7 +43,7 @@ public class FieldUtil {
     /**
      * 下划线转驼峰命名方式
      * @param field 字段名称
-     * @return
+     * @return 实体属性名
      */
     public static String toHumpString(String field){
         StringBuffer fieldBuffer=new StringBuffer();
@@ -62,7 +62,7 @@ public class FieldUtil {
     /**
      * 去除字符串最后一位
      * @param field 字段名称
-     * @return
+     * @return String
      */
     public static String subLastChar(StringBuffer field){
        if(field==null){

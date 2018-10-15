@@ -1,6 +1,5 @@
 package cn.org.zhixiang.utils;
 
-import cn.org.zhixiang.config.SpringContextUtil;
 import cn.org.zhixiang.entity.IdField;
 import cn.org.zhixiang.mapper.BaseMapper;
 import cn.org.zhixiang.service.BaseService;
@@ -15,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author syj
  * CreateTime 2018/10/10
- * describe:
+ * describe: service工厂类
  */
 public class ServiceBeanFactory {
 

@@ -5,9 +5,9 @@ import java.util.Map;
 /**
  * describe:
  *
- * @创建人 syj
- * @创建时间 2018/09/30
- * @描述 分页查询对象
+ * @author syj
+ * CreateTime 2018/09/30
+ * Description 分页查询对象
  */
 public class GridPageRequest {
     /**

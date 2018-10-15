@@ -11,14 +11,12 @@ import java.util.Map;
 /**
  * describe:
  *
- * @创建人 syj
- * @创建时间 2018/09/30
- * @描述 map和对象的互相转换
+ * @author syj
+ * CreateTime 2018/09/30
+ * Description map和对象互相转换的工具类
  */
 public class BeanMapUtil {
-    /**
-     * 将对象装换为map
-     */
+
     public static <T> Map<String, Object> beanToMap(T bean) {
         Map<String, Object> map = new HashMap();
         if (bean != null) {
@@ -29,7 +27,6 @@ public class BeanMapUtil {
         }
         return map;
     }
-
 
 
     public static Object mapToBean(Map<String, Object> map, Class clazz)  {
@@ -64,9 +61,7 @@ public class BeanMapUtil {
         return o;
     }
 
-    /**
-     * 将List<T1>转换为List<Map<String, Object>>
-     */
+
     public static <T> List<Map<String, Object>> objectsToMaps(List<T> objList) {
         List<Map<String, Object>> list = new ArrayList();
         if (objList != null && objList.size() > 0) {

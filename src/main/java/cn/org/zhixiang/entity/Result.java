@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
  *
  * @author syj
  * CreateTime 2018/10/09
- * describe:
+ * describe: controller返回结果包装类
  */
 public class Result {
     /**

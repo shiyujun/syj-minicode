@@ -1,4 +1,4 @@
-package cn.org.zhixiang.config;
+package cn.org.zhixiang.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -8,9 +8,9 @@ import org.springframework.stereotype.Component;
 /**
  * describe:
  *
- * @创建人 syj
- * @创建时间 2018/09/30
- * @描述
+ * @author syj
+ * CreateTime 2018/09/30
+ * Description  获取ApplicationContext的类
  */
 
 @Component

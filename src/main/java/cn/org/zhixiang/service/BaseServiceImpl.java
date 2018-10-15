@@ -1,7 +1,7 @@
 package cn.org.zhixiang.service;
 
 
-import cn.org.zhixiang.config.SpringContextUtil;
+import cn.org.zhixiang.utils.SpringContextUtil;
 import cn.org.zhixiang.entity.GridPageRequest;
 import cn.org.zhixiang.extend.ExtendInterface;
 import cn.org.zhixiang.mapper.BaseMapper;
@@ -21,9 +21,9 @@ import java.util.Set;
 /**
  * describe:
  *
- * @创建人 syj
- * @创建时间 2018/09/30
- * @描述
+ * @author syj
+ * CreateTime 2018/09/30
+ * Description
  */
 
 public class BaseServiceImpl implements BaseService {

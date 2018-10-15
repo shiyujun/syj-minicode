@@ -6,9 +6,9 @@ import java.util.Set;
 /**
  * describe:
  *
- * @创建人 syj
- * @创建时间 2018/09/30
- * @描述
+ * @author syj
+ * CreateTime 2018/09/30
+ * Description 多条件查询条件组装工具类
  */
 public class SelectPagePackUtil {
 

@@ -16,11 +16,21 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Properties;
 
-
+/**
+ * Description :
+ *
+ * @author  syj
+ * CreateTime    2018/10/14
+ * Description   全局配置管理类
+ */
 @ComponentScan("cn.org.zhixiang")
 @Configuration
 public class EnableSyjMiniCodeConfiguration {
 
+    /**
+     *
+     * @return PageHelper
+     */
     @Bean
     @Conditional(PageHelperCondition.class)
     public PageHelper pageHelper() {
