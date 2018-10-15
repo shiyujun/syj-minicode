@@ -168,7 +168,7 @@
     <dependency>
         <groupId>cn.org.zhixiang</groupId>
         <artifactId>syj-minicode</artifactId>
-        <version>1.0.0</version>
+        <version>0.0.1</version>
      </dependency>
     ```
 2. 注册syj-minicode
@@ -202,9 +202,6 @@
 
 # 版本信息
 1. 0.0.1
-
-   > 内测版本
-2. 1.0.0
 
    > syj-minicode上线
 
