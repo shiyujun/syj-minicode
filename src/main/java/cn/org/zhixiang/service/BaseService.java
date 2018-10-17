@@ -21,6 +21,8 @@ public interface BaseService{
 
     public List<Map<String, Object>> selectBySelective(GridPageRequest gridPageRequest);
 
+    public List<Map<String, Object>> selectBySelective(String sql);
+
     public void deleteById(String id);
 
     public void deleteByIds(List<String> ids);

@@ -32,101 +32,74 @@ public class BaseServiceImpl implements BaseService {
     private String tableName;
     private String idField;
 
-    private static BaseMapper baseMapper= SpringContextUtil.getBean(Const.BASE_MAPPER_NAME);
-    private static ExtendInterface insertExtend= SpringContextUtil.getBean(Const.INSERT_EXTEND);
-    private static ExtendInterface updateExtend= SpringContextUtil.getBean(Const.INSERT_EXTEND);
-
+    private static BaseMapper baseMapper = SpringContextUtil.getBean(Const.BASE_MAPPER_NAME);
+    private static ExtendInterface insertExtend = SpringContextUtil.getBean(Const.INSERT_EXTEND);
+    private static ExtendInterface updateExtend = SpringContextUtil.getBean(Const.INSERT_EXTEND);
 
 
     public BaseServiceImpl(String tableName, String baseResult, String idField) {
-        this.tableName=tableName;
-        this.baseResult=baseResult;
-        this.idField=idField;
+        this.tableName = tableName;
+        this.baseResult = baseResult;
+        this.idField = idField;
     }
 
 
     @Override
-    public Map<String,Object> selectOneById(String id) {
-        Map<String,Object> resultMap=baseMapper.selectOneById(baseResult,tableName,idField,id);
+    public Map<String, Object> selectOneById(String id) {
+        Map<String, Object> resultMap = baseMapper.selectOneById(baseResult, tableName, idField, id);
         return resultMap;
     }
 
     @Override
     public PageInfo<Object> selectByPage(GridPageRequest gridPageRequest) {
         PageHelper.startPage(gridPageRequest.getPageNum(), gridPageRequest.getPageSize());
-        StringBuffer sql=new StringBuffer("where 1=1 ");
-        String search= SelectPagePackUtil.packSerach(gridPageRequest.getSearchMap());
-        String likeSearch=SelectPagePackUtil.packLikeSerach(gridPageRequest.getLikeSearchMap());
-        String group=SelectPagePackUtil.packGroup(gridPageRequest.getGroupArray());
-        String order=SelectPagePackUtil.packOrder(gridPageRequest.getOrderMap());
-        if(search!=null){
-            sql.append(search);
-        }
-        if(likeSearch!=null){
-            sql.append(likeSearch);
-        }
-        if(group!=null){
-            sql.append(group);
-        }
-        if(order!=null){
-            sql.append(order);
-        }
-        List<Map<String, Object>> resultList=baseMapper.selectByPage(baseResult,tableName,sql.toString());
+        String sql=buildSelectSql(gridPageRequest);
+        List<Map<String, Object>> resultList = baseMapper.selectByPage(baseResult, tableName, sql.toString());
         PageInfo pageInfo = new PageInfo(resultList);
         return pageInfo;
     }
+
     @Override
     public List<Map<String, Object>> selectBySelective(GridPageRequest gridPageRequest) {
-        StringBuffer sql=new StringBuffer("where 1=1 ");
-        String search= SelectPagePackUtil.packSerach(gridPageRequest.getSearchMap());
-        String likeSearch=SelectPagePackUtil.packLikeSerach(gridPageRequest.getLikeSearchMap());
-        String group=SelectPagePackUtil.packGroup(gridPageRequest.getGroupArray());
-        String order=SelectPagePackUtil.packOrder(gridPageRequest.getOrderMap());
-        if(search!=null){
-            sql.append(search);
-        }
-        if(likeSearch!=null){
-            sql.append(likeSearch);
-        }
-        if(group!=null){
-            sql.append(group);
-        }
-        if(order!=null){
-            sql.append(order);
-        }
-        List<Map<String, Object>> resultList=baseMapper.selectByPage(baseResult,tableName,sql.toString());
+        String sql=buildSelectSql(gridPageRequest);
+        List<Map<String, Object>> resultList = baseMapper.selectByPage(baseResult, tableName, sql);
+        return resultList;
+    }
+    @Override
+    public List<Map<String, Object>> selectBySelective(String sql) {
+
+        List<Map<String, Object>> resultList = baseMapper.selectBySelective(sql);
         return resultList;
     }
 
     @Override
     public void deleteById(String id) {
-        baseMapper.deleteById(tableName,idField,id);
+        baseMapper.deleteById(tableName, idField, id);
     }
 
     @Override
     public void deleteByIds(List<String> idList) {
-        String ids= String.join(",",idList);
-        baseMapper.deleteByIds(tableName,idField,ids);
+        String ids = String.join(",", idList);
+        baseMapper.deleteByIds(tableName, idField, ids);
     }
-
 
 
     @Override
     public void insertSelective(Object object) {
-        StringBuffer keyBuffer=new StringBuffer();
-        StringBuffer valueBuffer=new StringBuffer();
+        StringBuffer keyBuffer = new StringBuffer();
+        StringBuffer valueBuffer = new StringBuffer();
 
-        Map<String,Object> objectMap;
-        if(object instanceof Map){
-            objectMap=(Map)object;
-        }else{
-            objectMap=BeanMapUtil.beanToMap(object);
+        Map<String, Object> objectMap;
+        if (object instanceof Map) {
+            objectMap = (Map) object;
+        } else {
+            objectMap = BeanMapUtil.beanToMap(object);
         }
-        Map<String,String> insertMap= insertExtend.exectue();
+        Map<String, String> insertMap = insertExtend.exectue();
         objectMap.putAll(insertMap);
-        Set<Map.Entry<String,Object>> entrySet= objectMap.entrySet();
-        for (Map.Entry<String,Object> entry:entrySet){
-            if(entry.getValue()==null){
+        Set<Map.Entry<String, Object>> entrySet = objectMap.entrySet();
+        for (Map.Entry<String, Object> entry : entrySet) {
+            if (entry.getValue() == null) {
                 continue;
             }
             keyBuffer.append("`");
@@ -137,47 +110,78 @@ public class BaseServiceImpl implements BaseService {
             valueBuffer.append("\",");
         }
 
-        String insertKey=FieldUtil.subLastChar(keyBuffer);
-        String valueKey=FieldUtil.subLastChar(valueBuffer);
-        baseMapper.insert(tableName,insertKey,valueKey);
+        String insertKey = FieldUtil.subLastChar(keyBuffer);
+        String valueKey = FieldUtil.subLastChar(valueBuffer);
+        baseMapper.insert(tableName, insertKey, valueKey);
 
     }
 
     @Override
     public void updateByIdSelective(Object object) {
-        StringBuffer keyBuffer=new StringBuffer();
-        Map<String,Object> objectMap;
-        if(object instanceof Map){
-            objectMap=(Map)object;
-        }else{
-            objectMap=BeanMapUtil.beanToMap(object);
+        StringBuffer keyBuffer = new StringBuffer();
+        Map<String, Object> objectMap;
+        if (object instanceof Map) {
+            objectMap = (Map) object;
+        } else {
+            objectMap = BeanMapUtil.beanToMap(object);
         }
 
-        Map<String,String> updateMap= updateExtend.exectue();
+        Map<String, String> updateMap = updateExtend.exectue();
         objectMap.putAll(updateMap);
 
-        Set<Map.Entry<String,Object>> entrySet= objectMap.entrySet();
-        String id=null;
+        Set<Map.Entry<String, Object>> entrySet = objectMap.entrySet();
+        String id = null;
         keyBuffer.append("set ");
-        for (Map.Entry<String,Object> entry:entrySet){
-            if(entry.getValue()==null){
+        for (Map.Entry<String, Object> entry : entrySet) {
+            if (entry.getValue() == null) {
                 continue;
             }
-            if(!Objects.equals(idField,entry.getKey())){
+            if (!Objects.equals(idField, entry.getKey())) {
                 keyBuffer.append("`");
                 keyBuffer.append(FieldUtil.toUnderLineString(entry.getKey()));
                 keyBuffer.append("` =\"");
                 keyBuffer.append(entry.getValue().toString());
                 keyBuffer.append("\",");
-            }else{
-                id=entry.getValue().toString();
+            } else {
+                id = entry.getValue().toString();
             }
         }
 
-        String param=FieldUtil.subLastChar(keyBuffer);
-        baseMapper.update(tableName,param,idField,id);
+        String param = FieldUtil.subLastChar(keyBuffer);
+        baseMapper.update(tableName, param, idField, id);
 
     }
 
-
+    private String buildSelectSql(GridPageRequest gridPageRequest) {
+        StringBuffer sql = new StringBuffer("where 1=1 ");
+        String search = SelectPagePackUtil.packSerach(gridPageRequest.getSearchMap(), "=");
+        String largeSearch = SelectPagePackUtil.packSerach(gridPageRequest.getLargeSearchMap(), ">=");
+        String smallSearch = SelectPagePackUtil.packSerach(gridPageRequest.getSmallSearchMap(), "<=");
+        String notEquleSearch = SelectPagePackUtil.packSerach(gridPageRequest.getNotEquleSearchMap(), "!=");
+        String likeSearch = SelectPagePackUtil.packLikeSerach(gridPageRequest.getLikeSearchMap());
+        String group = SelectPagePackUtil.packGroup(gridPageRequest.getGroupArray());
+        String order = SelectPagePackUtil.packOrder(gridPageRequest.getOrderMap());
+        if (search != null) {
+            sql.append(search);
+        }
+        if (largeSearch != null) {
+            sql.append(largeSearch);
+        }
+        if (smallSearch != null) {
+            sql.append(smallSearch);
+        }
+        if (notEquleSearch != null) {
+            sql.append(notEquleSearch);
+        }
+        if (likeSearch != null) {
+            sql.append(likeSearch);
+        }
+        if (group != null) {
+            sql.append(group);
+        }
+        if (order != null) {
+            sql.append(order);
+        }
+        return sql.toString();
+    }
 }

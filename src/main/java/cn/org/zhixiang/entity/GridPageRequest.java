@@ -34,7 +34,18 @@ public class GridPageRequest {
      * 查几条
      */
     private Integer pageSize;
-
+    /**
+     * 大于等于查询关键字Map
+     */
+    private Map<String, String> largeSearchMap;
+    /**
+     * 小于等于查询关键字Map
+     */
+    private Map<String, String> smallSearchMap;
+    /**
+     * 不等于查询关键字Map
+     */
+    private Map<String, String> notEquleSearchMap;
 
     public Map<String, String> getSearchMap() {
         return searchMap;
@@ -82,5 +93,29 @@ public class GridPageRequest {
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public Map<String, String> getLargeSearchMap() {
+        return largeSearchMap;
+    }
+
+    public void setLargeSearchMap(Map<String, String> largeSearchMap) {
+        this.largeSearchMap = largeSearchMap;
+    }
+
+    public Map<String, String> getSmallSearchMap() {
+        return smallSearchMap;
+    }
+
+    public void setSmallSearchMap(Map<String, String> smallSearchMap) {
+        this.smallSearchMap = smallSearchMap;
+    }
+
+    public Map<String, String> getNotEquleSearchMap() {
+        return notEquleSearchMap;
+    }
+
+    public void setNotEquleSearchMap(Map<String, String> notEquleSearchMap) {
+        this.notEquleSearchMap = notEquleSearchMap;
     }
 }

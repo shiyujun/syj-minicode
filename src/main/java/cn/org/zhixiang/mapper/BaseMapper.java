@@ -46,4 +46,7 @@ public interface BaseMapper {
                 @Param("param")String param,
                 @Param("idField")String idField,
                 @Param("id") String id);
+
+    @Select(" ${sql}")
+    List<Map<String,Object>> selectBySelective(@Param("sql") String sql);
 }

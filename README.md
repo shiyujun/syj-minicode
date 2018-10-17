@@ -52,6 +52,18 @@
         * 查几条
         */
        private Integer pageSize;
+       /**
+         * 大于等于查询关键字Map
+         */
+        private Map<String, String> largeSearchMap;
+        /**
+         * 小于等于查询关键字Map
+         */
+        private Map<String, String> smallSearchMap;
+        /**
+         * 不等于查询关键字Map
+         */
+        private Map<String, String> notEquleSearchMap;
     ```
     前端查询时只需要按照查询条件组装GridPageRequest对象就可以了
 3. 插入
@@ -152,13 +164,18 @@
     ```java
     getUserBaseService().deleteById("115");
     ```
-6. 批量删除
+7. 批量删除
     ```java
     List<String> list=new ArrayList<>();
     list.add("115");
     list.add("116");
     list.add("117");
     getUserBaseService().deleteByIds(list);
+    ```
+8. 自定义查询sql
+    ```java
+    getUserBaseService().selectBySelective("select * from user");
+
     ```
 # Quick Start
 >相信看了上方的介绍你已经迫不及待的想要使用了，那么使用起来简单么？看一下你就知道。
@@ -168,7 +185,7 @@
     <dependency>
         <groupId>cn.org.zhixiang</groupId>
         <artifactId>syj-minicode</artifactId>
-        <version>0.0.1</version>
+        <version>请使用以maven中央仓库的最新版本为准</version>
      </dependency>
     ```
 2. 注册syj-minicode
@@ -205,3 +222,7 @@
 
    > syj-minicode上线
 
+2. 0.0.2
+
+> 1. 增加普通查询时有使用大于小于不等于的查询条件
+> 2. 增加自定义查询sql接口

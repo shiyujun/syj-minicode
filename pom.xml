@@ -7,9 +7,7 @@
     <groupId>cn.org.zhixiang</groupId>
     <artifactId>syj-minicode</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.1</version>
-
-
+    <version>0.0.2</version>
 
     <name>syj-minicode</name>
     <description>a project about minicode</description>

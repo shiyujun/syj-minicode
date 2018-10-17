@@ -12,7 +12,7 @@ import java.util.Set;
  */
 public class SelectPagePackUtil {
 
-    public static String packSerach(Map<String, String> searchMap){
+    public static String packSerach(Map<String, String> searchMap,String condition ){
         if(searchMap==null){
             return null;
         }
@@ -21,7 +21,8 @@ public class SelectPagePackUtil {
         for (Map.Entry<String, String> entry:entrySet){
             stringBuffer.append(" and ");
             stringBuffer.append(FieldUtil.toUnderLineString(entry.getKey()));
-            stringBuffer.append(" = \"");
+            stringBuffer.append(condition);
+            stringBuffer.append(" \"");
             stringBuffer.append(entry.getValue());
             stringBuffer.append("\"");
         }
@@ -71,4 +72,6 @@ public class SelectPagePackUtil {
         }
         return FieldUtil.subLastChar(stringBuffer);
     }
+
+
 }
