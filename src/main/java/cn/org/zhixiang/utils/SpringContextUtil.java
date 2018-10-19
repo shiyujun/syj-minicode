@@ -30,5 +30,8 @@ public class SpringContextUtil implements ApplicationContextAware {
     public static <T> T getBean(String name) throws BeansException {
         return (T) applicationContext.getBean(name);
     }
+    public static <T> T getBean(Class clazz) throws BeansException {
+        return (T) applicationContext.getBean(clazz);
+    }
 
 }

@@ -15,18 +15,23 @@ import java.util.Map;
 public interface BaseMapper {
 
     @Select(" select ${baseResult} from `${tableName}` where `${idField}` = #{id}")
-    public Map<String, Object> selectOneById(@Param("baseResult") String baseResult,
+    Map<String, Object> selectOneById(@Param("baseResult") String baseResult,
                                              @Param("tableName") String tableName,
                                              @Param("idField") String idField,
                                              @Param("id") String id);
 
     @Select(" select column_name from information_schema.columns where table_name='${tableName}'")
-    public List<String> selectColumnName(@Param("tableName")String tableName);
+    List<String> selectColumnName(@Param("tableName")String tableName);
 
     @Select(" select ${baseResult} from `${tableName}` ${sql}")
-    public List<Map<String, Object>> selectByPage(@Param("baseResult") String baseResult,
+    List<Map<String, Object>> selectByPage(@Param("baseResult") String baseResult,
                                                   @Param("tableName") String tableName,
                                                   @Param("sql") String sql);
+
+    @Select(" select count(1) from `${tableName}` ${sql}")
+    long count(@Param("tableName") String tableName,
+               @Param("sql") String sql);
+
     @Delete("delete from `${tableName}` where `${idField}` = #{id}")
     void deleteById( @Param("tableName")String tableName,
                      @Param("idField") String idField,

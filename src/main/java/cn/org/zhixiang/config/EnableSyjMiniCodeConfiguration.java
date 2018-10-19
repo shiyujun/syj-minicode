@@ -5,45 +5,31 @@ import cn.org.zhixiang.entity.IdField;
 import cn.org.zhixiang.extend.DefaultExtend;
 import cn.org.zhixiang.extend.ExtendInterface;
 import cn.org.zhixiang.utils.Const;
-import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInterceptor;
 import org.apache.ibatis.plugin.Interceptor;
 import org.mybatis.spring.SqlSessionFactoryBean;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
+import javax.sql.DataSource;
 import java.util.Properties;
 
 /**
  * Description :
  *
- * @author  syj
+ * @author syj
  * CreateTime    2018/10/14
  * Description   全局配置管理类
  */
 @ComponentScan("cn.org.zhixiang")
+@MapperScan(basePackages = "cn.org.zhixiang.mapper")
 @Configuration
 public class EnableSyjMiniCodeConfiguration {
-
-    /**
-     *
-     * @return PageHelper
-     */
-    @Bean
-    @Conditional(PageHelperCondition.class)
-    public PageHelper pageHelper() {
-        PageHelper pageHelper = new PageHelper();
-        Properties properties = new Properties();
-        properties.setProperty("reasonable", "true");
-        properties.setProperty("supportMethodsArguments", "true");
-        properties.setProperty("returnPageInfo", "check");
-        properties.setProperty("params", "count=countSql");
-        pageHelper.setProperties(properties);
-        new SqlSessionFactoryBean().setPlugins(new Interceptor[]{pageHelper});
-        return pageHelper;
-    }
 
     @Bean
     @ConditionalOnMissingBean(name = Const.ID_FIELD_NAME)

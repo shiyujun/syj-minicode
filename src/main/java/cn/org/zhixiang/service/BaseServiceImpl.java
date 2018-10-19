@@ -1,14 +1,11 @@
 package cn.org.zhixiang.service;
 
 
-import cn.org.zhixiang.utils.SpringContextUtil;
 import cn.org.zhixiang.entity.GridPageRequest;
+import cn.org.zhixiang.entity.Result;
 import cn.org.zhixiang.extend.ExtendInterface;
 import cn.org.zhixiang.mapper.BaseMapper;
-import cn.org.zhixiang.utils.BeanMapUtil;
-import cn.org.zhixiang.utils.Const;
-import cn.org.zhixiang.utils.FieldUtil;
-import cn.org.zhixiang.utils.SelectPagePackUtil;
+import cn.org.zhixiang.utils.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
@@ -32,11 +29,12 @@ public class BaseServiceImpl implements BaseService {
     private String tableName;
     private String idField;
 
-    private static BaseMapper baseMapper = SpringContextUtil.getBean(Const.BASE_MAPPER_NAME);
+    private static BaseMapper baseMapper = SpringContextUtil.getBean(BaseMapper.class);
     private static ExtendInterface insertExtend = SpringContextUtil.getBean(Const.INSERT_EXTEND);
     private static ExtendInterface updateExtend = SpringContextUtil.getBean(Const.INSERT_EXTEND);
 
-
+    public BaseServiceImpl() {
+    }
     public BaseServiceImpl(String tableName, String baseResult, String idField) {
         this.tableName = tableName;
         this.baseResult = baseResult;
@@ -51,12 +49,13 @@ public class BaseServiceImpl implements BaseService {
     }
 
     @Override
-    public PageInfo<Object> selectByPage(GridPageRequest gridPageRequest) {
+    public Result selectByPage(GridPageRequest gridPageRequest) {
         PageHelper.startPage(gridPageRequest.getPageNum(), gridPageRequest.getPageSize());
         String sql=buildSelectSql(gridPageRequest);
-        List<Map<String, Object>> resultList = baseMapper.selectByPage(baseResult, tableName, sql.toString());
+        List<Map<String, Object>> resultList = baseMapper.selectByPage(baseResult, tableName, sql);
+        //Long count=baseMapper.count(tableName,sql);
         PageInfo pageInfo = new PageInfo(resultList);
-        return pageInfo;
+        return new Result(pageInfo);
     }
 
     @Override

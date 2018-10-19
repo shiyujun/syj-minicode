@@ -1,0 +1,7 @@
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+
+pagehelper:
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
