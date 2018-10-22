@@ -21,6 +21,10 @@ public class Const {
      */
     public static final String UPDATE_EXTEND="updateExtend";
     /**
+     * SelectExtend的bean name
+     */
+    public static final String SELECT_EXTEND="selectExtend";
+    /**
      * InsertExtend的bean name
      */
     public static final String INSERT_EXTEND="insertExtend";

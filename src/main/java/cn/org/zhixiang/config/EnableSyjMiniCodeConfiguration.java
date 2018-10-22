@@ -63,4 +63,10 @@ public class EnableSyjMiniCodeConfiguration {
         return new DefaultExtend();
     }
 
+    @Bean(Const.SELECT_EXTEND)
+    @ConditionalOnMissingBean(name = Const.SELECT_EXTEND)
+    public ExtendInterface selectExtend() {
+        return new DefaultExtend();
+    }
+
 }

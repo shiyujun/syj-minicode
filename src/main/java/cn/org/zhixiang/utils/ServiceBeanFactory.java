@@ -1,6 +1,7 @@
 package cn.org.zhixiang.utils;
 
 import cn.org.zhixiang.entity.IdField;
+import cn.org.zhixiang.extend.ExtendInterface;
 import cn.org.zhixiang.mapper.BaseMapper;
 import cn.org.zhixiang.service.BaseService;
 import cn.org.zhixiang.service.BaseServiceImpl;
@@ -19,6 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ServiceBeanFactory {
 
     private static BaseMapper baseMapper= SpringContextUtil.getBean(Const.BASE_MAPPER_NAME);
+    private static ExtendInterface selectExtend = SpringContextUtil.getBean(Const.SELECT_EXTEND);
 
     private static Map<String,BaseService> beanMap= new ConcurrentHashMap<>();
 
@@ -36,6 +38,10 @@ public class ServiceBeanFactory {
 
 
     private static String buildBaseResult(String tableName) {
+        Map<String, String> selectMap = selectExtend.exectue();
+        if(selectMap.containsKey(tableName)){
+            return selectMap.get(tableName);
+        }
         List<String> columnList=baseMapper.selectColumnName(tableName);
         StringBuffer baseResultBuffer=new StringBuffer();
         for (String column : columnList){

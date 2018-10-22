@@ -7,7 +7,7 @@ import java.util.Map;
  *
  * @author syj
  * CreateTime 2018/10/11
- * describe: 当你插入或更新数据时如果需要扩展信息时请实现此接口。并注入这个bean到Spring中
+ * describe: 当你查询、插入或更新数据时如果需要扩展信息时请实现此接口。并注入这个bean到Spring中
  */
 public interface ExtendInterface {
     public Map<String,String> exectue();
