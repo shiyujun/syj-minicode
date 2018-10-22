@@ -36,7 +36,7 @@ public class BaseController {
      */
     @RequestMapping(value = "/{entityName}/page", method = RequestMethod.POST)
     public Result selectByPage(@PathVariable String entityName, @RequestBody GridPageRequest gridPageRequest) {
-        return new Result(ServiceBeanFactory.getBean(entityName).selectByPage(gridPageRequest)) ;
+        return ServiceBeanFactory.getBean(entityName).selectByPage(gridPageRequest);
     }
 
     /**

@@ -1,7 +1,7 @@
 package cn.org.zhixiang.service;
 
 import cn.org.zhixiang.entity.GridPageRequest;
-import com.github.pagehelper.PageInfo;
+import cn.org.zhixiang.entity.Result;
 
 import java.util.List;
 import java.util.Map;
@@ -17,7 +17,7 @@ public interface BaseService{
 
     public Map<String,Object> selectOneById(String id);
 
-    public PageInfo<Object> selectByPage(GridPageRequest gridPageRequest);
+    public Result selectByPage(GridPageRequest gridPageRequest);
 
     public List<Map<String, Object>> selectBySelective(GridPageRequest gridPageRequest);
 

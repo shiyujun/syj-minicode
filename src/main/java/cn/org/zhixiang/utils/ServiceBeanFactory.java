@@ -19,8 +19,10 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ServiceBeanFactory {
 
-    private static BaseMapper baseMapper= SpringContextUtil.getBean(Const.BASE_MAPPER_NAME);
+
     private static ExtendInterface selectExtend = SpringContextUtil.getBean(Const.SELECT_EXTEND);
+    private static BaseMapper baseMapper= SpringContextUtil.getBean(BaseMapper.class);
+
 
     private static Map<String,BaseService> beanMap= new ConcurrentHashMap<>();
 

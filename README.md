@@ -130,6 +130,21 @@
             }
         }
     ```
+    3. 查询扩展
+        有的项目在进行查询时可能会忽略某些字段不想让传递给前端。如果有此需求请按照如下方式调用
+         创建一个名为SelectExtend的bean并实现DefaultExtend接口
+        ```java
+            @Component
+            public class SelectExtend implements ExtendInterface{
+                @Override
+                public Map<String, String> exectue() {
+                    Map<String, String> map=new HashMap<>();
+                    map.put("user", "id, user_name as userName, pass as passWord");
+                    map.put("merchant_user", "create_user as createUser, update_by as updateUser");
+                    return map;
+                }
+            }
+        ```
 # 还有没有更灵活的使用方式？
 > 上方使用方式其实是直接抽象到了controller层，解决一般的需要是没问题的，但是我们是有业务逻辑的，那么存在业务逻辑的情况下如何使用呢？
 > 你可以在处理完业务逻辑后在service中调用
@@ -226,3 +241,10 @@
 
 > 1. 增加普通查询时有使用大于小于不等于的查询条件
 > 2. 增加自定义查询sql接口
+
+3. 0.0.3
+> 1. 解决部分项目引入不能启动的问题
+> 2. 引入pagehelper分页插件
+
+4. 0.0.4
+> 1. 新增查询扩展接口

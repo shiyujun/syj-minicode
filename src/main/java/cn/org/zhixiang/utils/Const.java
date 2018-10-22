@@ -8,10 +8,7 @@ package cn.org.zhixiang.utils;
  * Description   全局静态常量类
  */
 public class Const {
-    /**
-     * BaseMapper的bean name
-     */
-    public static final String BASE_MAPPER_NAME="baseMapper";
+
     /**
      * IdField的bean name
      */
