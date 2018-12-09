@@ -96,9 +96,9 @@
     </licenses>
     <scm>
         <tag>master</tag>
-        <url>https://github.com/2388386839/syj-minicode.git</url>
-        <connection>scm:git:https://github.com/2388386839/syj-minicode.git</connection>
-        <developerConnection>scm:git:https://github.com/2388386839/syj-minicode.git</developerConnection>
+        <url>https://github.com/shiyujun/syj-minicode.git</url>
+        <connection>scm:git:https://github.com/shiyujun/syj-minicode.git</connection>
+        <developerConnection>scm:git:https://github.com/shiyujun/syj-minicode.git</developerConnection>
     </scm>
     <developers>
         <developer>

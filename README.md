@@ -222,12 +222,12 @@
     
         ```
 # 更多
-1. 如果将syj-minicode用于项目的请在此链接留下足迹，便于宣传。[开源登记](https://github.com/2388386839/syj-minicode/issues/1)
-2. 如果有需要新功能的同志可以在此链接留下足迹，帮助syj-minicode更加完善。[新需求](https://github.com/2388386839/syj-minicode/issues/2)
+1. 如果将syj-minicode用于项目的请在此链接留下足迹，便于宣传。[开源登记](https://github.com/shiyujun/syj-minicode/issues/1)
+2. 如果有需要新功能的同志可以在此链接留下足迹，帮助syj-minicode更加完善。[新需求](https://github.com/shiyujun/syj-minicode/issues/2)
 # 作者信息
 
 1. [个人网站](http://zhixiang.org.cn)
-2. [GitHub](https://github.com/2388386839)
+2. [GitHub](https://github.com/shiyujun)
 3. [码云](https://gitee.com/zhixiang_blog)
 
 
