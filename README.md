@@ -226,7 +226,7 @@
 2. 如果有需要新功能的同志可以在此链接留下足迹，帮助syj-minicode更加完善。[新需求](https://github.com/shiyujun/syj-minicode/issues/2)
 # 作者信息
 
-1. [个人网站](shiyujun.cn)
+1. [个人网站](https://shiyujun.cn)
 2. [GitHub](https://github.com/shiyujun)
 
 
